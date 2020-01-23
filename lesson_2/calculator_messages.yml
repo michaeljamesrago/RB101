@@ -1,0 +1,9 @@
+en:
+  welcome: 'Welcome to Calculator!'
+  invalid_entry: 'That is not a valid entry.'
+es:
+  welcome: 'Bienvenido a la Calculator!'
+  invalid_entry: 'No es un valid entry.'
+fr:
+  welcome: 'Bienvenue au Calculator!'
+  invalid_entry: 'Ce nest pas une entrie valide.'
