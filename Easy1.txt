@@ -1,0 +1,85 @@
+1.  What would you expect the code below to print out?
+
+    numbers = [1, 2, 2, 3]
+    numbers.uniq
+
+    puts numbers
+
+A:  1
+    2
+    2
+    3
+
+2.  Describe the difference between ! and ? in Ruby. And explain what would happen in the following scenarios:
+
+    1. what is != and where should you use it?
+    2. put ! before something, like !user_name
+    3. put ! after something, like words.uniq!
+    4. put ? before something
+    5. put ? after something
+    6. put !! before something, like !!user_name
+
+    A:  ! is a logical NOT operator, and ? is the ternary operator.
+
+    1. NOT equal. Returns boolean
+    2. NOT, returns false if variable is set to anything but nil or false
+    3. part of the method name
+    4. the ternary operator
+    5. part of the method name
+    6. converts something to its boolean value
+
+3.  Replace the word "important" with "urgent" in this string:
+
+    advice = "Few things in life are as important as house training your pet
+    dinosaur."
+
+    advice.gsub!('important', 'urgent')
+
+4.  The Ruby Array class has several methods for removing items from the array.
+    Two of them have very similar names. Let's see how they differ:
+
+    numbers = [1, 2, 3, 4, 5]
+
+    What do the following method calls do (assume we reset numbers to the
+    original array between method calls)?
+
+    numbers.delete_at(1) - deletes first element of array (index 0)
+    numbers.delete(1) - deletes first occurrence of object in array (1)
+
+5.  Programmatically determine if 42 lies between 10 and 100.
+
+    A: (10..100).cover?(42)
+
+6.  Starting with the string:
+
+    famous_words = "seven years ago..."
+    show two different ways to put the expected "Four score and " in front of
+    it.
+
+    A:'Fourscore and ' << famous_words  or 'Fourscore and '.concat(famous_words)
+
+7.  If we build an array like this:
+
+    flintstones = ["Fred", "Wilma"]
+    flintstones << ["Barney", "Betty"]
+    flintstones << ["BamBam", "Pebbles"]
+    We will end up with this "nested" array:
+
+    ["Fred", "Wilma", ["Barney", "Betty"], ["BamBam", "Pebbles"]]
+    Make this into an un-nested array.
+
+    A: flintstones.flatten!
+
+8.  Given the hash below
+
+    flintstones = { "Fred" => 0,
+                    "Wilma" => 1,
+                    "Barney" => 2,
+                    "Betty" => 3,
+                    "BamBam" => 4,
+                    "Pebbles" => 5
+                  }
+    Turn this into an array containing only two elements: Barney's name and
+    Barney's number
+
+    A: flintstones.assoc("Barney")
