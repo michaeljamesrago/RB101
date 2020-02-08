@@ -1,0 +1,39 @@
+      [[1, 2], [3, 4]].map do |arr|
+        puts arr.first
+        arr.first
+      end
+
+Line: 1
+Action: method call map
+Object: Outer Array
+Side Effects: None
+Return Value: [1, 3]
+Is Return Value Used?: No
+
+Line: 1-4
+Action: Block Execution
+Object: Every Inner Array
+Side Effects: none
+Return Value: Integer Value representing first element of inner array.
+Is Return Value Used? Yes, it gets passed to the map method.
+
+Line: 2
+Action: method call puts
+Object: Kernel
+Side Effects: A string is displayed to output
+Return Value: Nil
+Is Return Value Used? No
+
+Line: 2
+Action: method call first
+Object: Inner Array arr
+Side Effects: None
+Return Value: Element at position [0] of each inner array (arr)
+Is Return Value Used? Yes, by puts method
+
+Line 3
+Action: method call first
+Object: arr
+Side Effects: none
+Return Value: Element at position [0] of arr
+Is Return Value Used? Yes, it becomes the return value for the block.
