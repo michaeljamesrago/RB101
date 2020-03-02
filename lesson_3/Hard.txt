@@ -1,0 +1,22 @@
+1. What do you expect to happen when the greeting variable is referenced in the last line of the code below?
+
+if false
+  greeting = “hello world”
+end
+
+greeting
+
+A: The condition in the conditional statement `if false` will obviously never evaluate to `true`, therefore the local variable `greeting` will not be assigned to the string `"hello world"`. However, in the Ruby language, even if the code doesn't get executed due to the falsiness of the condition, the variable is still considered to have been declared, and may be referred to afterward. Its value is initialized to `nil`.
+
+2. What is the result of the last line in the code below?
+
+      greetings = { a: 'hi' }
+      informal_greeting = greetings[:a]
+      informal_greeting << ' there'
+
+      puts informal_greeting  #  => "hi there"
+      puts greetings
+
+A: As a result of the last line of this code, there will be an output of a stringified value of the `greetings` hash, or `{ a: 'hi there' }`, and a return value of `nil`. This shows that the value of greetings[:a] has been mutated by the shovel operator `<<`. If the line read `informal_greeting += ' there'`, the result of `puts greetings` would be an output of  `{ a: 'hi' }`, because the `+` method is not mutating.
+
+4.

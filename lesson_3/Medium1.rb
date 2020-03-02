@@ -21,7 +21,9 @@ The result of the following statement will be an error:
 
 Why is this and what are two possible ways to fix this?
 
-A: It's trying to add a string to an integer.
+A: The problem occurs because the string literal "the value of 40 + 2" is a string, and when you try to concatenate a string using the `+` method, any argument passed to it must also be evaluated as a string. In this case, the result of the evaluation of the the expression (40 + 2) is an integer object, and the Ruby language will not allow it to be added to a string.
+
+    One way to fix this would be to call the 'to_s' method on the result of (40 + 2). That would convert the result to a string which could be added to the other string. Another way would be to use string interpolation, as in `#{(40 + 2)}`
 =end
 
 puts "Question 2:"
@@ -107,8 +109,13 @@ got an error. Something about the limit variable. What's wrong with the code?
       result = fib(0, 1)
       puts "result is #{result}"
 
-A: The limit variable is not visible inside the method definition, because it
-is declared in an outer scope.
+A: On `line 1`, the variable `limit` is initialized and set to refer to an integer object with a value of 15. On `line 4`, the programmer attempts to use this variable inside a method definition. However, since the variable was initialized outside the method definition, it is not visible inside it. The scope of the `fib` method's definition does not include the variable `limit`.
+
+  One way to fix this would be to declare a constant and refer to that inside the method defnition instead, such as `LIMIT = 15`.
+
+  A programmer could also define the `fib` method to take the limit variable as an argument, like `def fib(first_num, second_num, limit)`. This means that the value would have to be newly passed in to the `fib` method every time it was called.
+
+  A third option would be to initialize the limit variable inside the method definition, making it local to the method definition. This is okay if you don't need access to the variable anywhere else in the program, because it will only be visible inside the method definition.
 
 Question 6:
 
@@ -124,7 +131,13 @@ What is the output of the following code?
 
     p answer - 8
 
-A: 34
+A: On line 1, A local variable `answer` is initialized to refer to an integer object with a value of 42.
+
+  On lines 3-5, the `mess_with_it` method is defined to accept one parameter, and a local variable `some_number` is initialized to refer to that parameter. On `line 4`, the local variable `some_number` is reassigned to its current value incremented by 8. The result of this expression's evaluation will be the return value of the `mess_with_it` method.
+
+  On `line 7`, the local variable `new_answer` is initialized to refer to the return value of a call to the `mess_with_it` method with the local variable `answer` passed to it as an argument. The value of `answer` is 42 at this time, as set on `line 1`. So `new_answer` is set to the return value of that method call, which will be 50, or 42 incremented by 8.
+
+  Throughout all this, the local variable `answer` has never been reassigned or mutated. It still points to the integer object 42. So on `line 9`, when the `p` method is called with the argument `answer - 8`, that expression evaluates to 34. Therefore, the output of this code will be 34.
 
 Question 7:
 
@@ -158,6 +171,12 @@ which passed each reference in the array to the block. Therefore, when the
 block is executed, it is operating on references the data in the original
 object, the munsters hash.
 
+Updated answer: Yes. The `mess_with_demographics` method was called, and the hash object `munsters` was passed to it as an argument. It was not a copy, it was the original object. The variable `demo_hash`, local to the `mess_with_demographics` method definition, refers to the `munsters` hash itself inside the method.
+
+    When the `values` method is called on `demo_hash`, it returns an array with references to the objects that are the values of that hash; again, not copies of those objects, but the objects themselves. So when the resulting array calls the `each` method, the code in the block passed to the `each` method will be operating with references to the hash objects that were the values of `demo_hash`.
+
+    Inside the block passed to the `each` method, the local variable `family_member` is assigned to each array member. The code on lines 11-12 mutates these members by reassigning the values associated with the keys `age` and `gender`. These are the same objects in the `munsters` hash, not copies of them. The `munsters` hash has been mutated.
+
 Question 8:
 
     def rps(fist1, fist2)
@@ -190,4 +209,8 @@ What would be the return value of the following method invocation?
 bar(foo)
 
 A: "no"
+
+The `foo` method always returns `yes`. When the `bar` method is called, the argument passed to it is the return value of the `foo` method, which is always `yes`.
+
+The default value of `param` in the `bar` method is `no`, but in this instance it is called with an argument of `yes`. Therefore, the conditional statement `param == "no"` will evaluate to `false`. Because this conditional is used with a ternary operator, and the condition evaluates to `false`, the code after the colon will be executed. After the colon is simply the string `"no"`, which will be the return value of this call to the `bar` method.
 =end

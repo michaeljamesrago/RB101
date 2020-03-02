@@ -37,7 +37,7 @@ def deal(deck)
   deck.shift(2)
 end
 
-def get_total(hand)
+def get_score(hand)
   devalue_aces!(hand)
   hand.reduce(0) { |acc, elem| acc + elem[:value] }
 end
@@ -53,49 +53,60 @@ def devalue_aces!(hand)
   end
 end
 
-def hit(deck, hand)
+def hit(deck, data)
   new_card = deck.shift
+  hand = data[:hand]
   hand << new_card
+  data[:score] = get_score(hand)
 end
 
 def initialize_game
   deck = initialize_deck
   player_hand = deal(deck)
   dealer_hand = deal(deck)
-  [deck, [player_hand, dealer_hand]]
+  participants = { player: { hand:  player_hand,
+                             score: get_score(player_hand) },
+                   dealer: { hand:  dealer_hand,
+                             score: get_score(dealer_hand) } }
+  [deck, participants]
 end
 
-# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/AbcSize, MethodLength
 def display_game(game, show_dealer_hand = false)
   system "cls"
-  player_hand = game[0]
-  dealer_hand = game[1]
-  player_total = get_total(player_hand)
-  dealer_total = get_total(dealer_hand)
+  player_hand = game[:player][:hand]
+  dealer_hand = game[:dealer][:hand]
+  player_score = game[:player][:score]
+  dealer_score = game[:dealer][:score]
   if show_dealer_hand
     puts "\nDealer hand:\n\n"
     dealer_hand.each { |card| puts card[:label] }
-    puts "\nDealer has #{dealer_total}.\n\n\n\n"
+    puts "\nDealer has #{dealer_score}.\n"
+    (7 - dealer_hand.size).times { puts "\n" }
   else
-    puts "\nDealer showing #{dealer_hand[0][:label]}\n\n\n\n"
+    puts "\nDealer showing #{dealer_hand[0][:label]}"
+    (12 - dealer_hand.size).times { puts "\n" }
   end
   puts "Player hand:\n\n"
   player_hand.each { |card| puts card[:label] }
-  puts "\nPlayer has #{player_total}.\n\n"
+  (5 - player_hand.size).times { puts "\n" }
+  puts "\nPlayer has #{player_score}."
 end
-# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/AbcSize, MethodLength
 
 loop do
   deck, game = initialize_game
-  player_hand = game[0]
-  dealer_hand = game[1]
+  player_data = game[:player]
+  dealer_data = game[:dealer]
+  player_hand = game[:player][:hand]
+  dealer_hand = game[:dealer][:hand]
 
   display_game(game)
 
   loop do
     prompt("Hit? ('y')")
     answer = gets.chomp.downcase
-    hit(deck, player_hand) if answer == 'y'
+    hit(deck, player_data) if answer == 'y'
     display_game(game)
     break if bust?(player_hand) || answer != 'y'
   end
@@ -107,9 +118,8 @@ loop do
   end
 
   loop do
-    dealer_score = get_total(dealer_hand)
-    break if bust?(dealer_hand) || dealer_score >= DEALER_STAYS_AT
-    hit(deck, dealer_hand)
+    break if bust?(dealer_hand) || dealer_data[:score] >= DEALER_STAYS_AT
+    hit(deck, dealer_data)
   end
 
   display_game(game, true)
@@ -120,7 +130,7 @@ loop do
     gets.chomp.downcase == 'y' ? next : break
   end
 
-  case get_total(player_hand) <=> get_total(dealer_hand)
+  case player_data[:score] <=> dealer_data[:score]
   when -1
     prompt("Dealer wins.")
   when 0

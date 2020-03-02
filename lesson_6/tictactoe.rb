@@ -15,7 +15,7 @@ def joinor(arr, delimiter = ', ', joining_word = 'or')
   len = arr.length
   arr.each_with_index do |elem, ind|
     if ind == 0
-      joined << "#{elem}"
+      joined << elem.to_s
     elsif len == 2
       joined << " #{joining_word} #{elem}"
     elsif ind != len - 1
@@ -27,7 +27,7 @@ def joinor(arr, delimiter = ', ', joining_word = 'or')
   joined
 end
 
-# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/AbcSize, MethodLength
 def display_board(brd)
   system "cls"
   puts "You're #{PLAYER_MARKER}. Computer is #{COMPUTER_MARKER}"
@@ -46,7 +46,7 @@ def display_board(brd)
   puts "     |     |"
   puts ""
 end
-# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/AbcSize, MethodLength
 
 def initialize_board(computer_score, player_score)
   new_board = {}
@@ -75,7 +75,7 @@ def winning_move(brd)
   smart_line = WINNING_LINES.find do |line|
     block = brd.values_at(*line)
     block.count(COMPUTER_MARKER) == 2 &&
-    block.count(INITIAL_MARKER) == 1
+      block.count(INITIAL_MARKER) == 1
   end
   return nil if !smart_line
   smart_line.find { |square| empty_squares(brd).include?(square) }
@@ -83,14 +83,13 @@ end
 
 def block(brd)
   smart_line = WINNING_LINES.find do |line|
-               block = brd.values_at(*line)
-               block.count(PLAYER_MARKER) == 2 &&
-               block.count(INITIAL_MARKER) == 1
+    block = brd.values_at(*line)
+    block.count(PLAYER_MARKER) == 2 &&
+      block.count(INITIAL_MARKER) == 1
   end
   return nil if !smart_line
   smart_line.find { |square| empty_squares(brd).include?(square) }
 end
-
 
 def computer_places_piece!(brd)
   square = winning_move(brd)
